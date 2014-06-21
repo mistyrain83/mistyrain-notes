@@ -1,0 +1,96 @@
+
+Projects are maintained on code.google.com。
+main project address: https://code.google.com/p/simdb-fpga/
+downloads files address: https://code.google.com/p/simdb-fpga.downloads/
+
+1. clone project
+    $git clone https://code.google.com/p/simdb-fpga/
+clone to simdb-fpga floder.
+    $git clone https://code.google.com/p/simdb-fpga/ mysimdb-fpga
+clone to mysimdb-fpga folder.
+
+2. project status
+    $git status
+
+3. master branch and tag
+tags should be in master. there have two ways:
+one is(first time use this way):
+    $git tag -a v1.0 -m "my version 1.0"  // add tag in local
+    $git push --tags  // push all tags
+the other is:
+    $git push origin <tagname>  // push a single tag 
+
+when develop in master
+    $git commit -m "comments"
+    $git push origin master
+
+4. develop branch
+the central repo holds two main branches with an infinite lifetime: master and develop.
+create branch "develop" from "master".
+    $git checkout -b develop master
+push into develop branch
+	$git push origin develop
+when there are main version release, "develop" should merge to "master"
+    $git checkout master
+    $git merge --no-ff develop
+    $git push origin master
+
+5. feature branch
+when starting work on a new feature, branch off from the "develop" branch.
+    $git checkout -b myfeature develop
+switched to a new branch "myfeature"
+    $git commit -m "feature comments"
+    $git push origin myfeature
+finished features may be merged into the "develop" branch definitely add them to the upcoming release
+    $git checkout develop   // switched to branch "develop"
+    $git merge --no-ff myfeature
+then delete local feature branch
+    //$git branch -d myfeature  // deleted local branch "myfeature"
+then delete remote feature branch
+    //$git push origin --delete myfeature  // deleted remote branch "myfeature"
+    $git push origin develop
+
+6. hotfix branch
+branch from "master", must merge back into "develop" and "master", branch naming convention "hotfix-*".
+hotfix branches are created from the "master" branch. fox example, say version 1.2 is the current production release running live and causing troubles due to a severe bug. but changes on develop are yet unstable. we may then branch off a hotfix banch and start fixing the problem 
+    $git checkout -b hotfix-v1.1 master
+switched to a new branch "hotfix-v1.1"
+    $git commit -m "fixed severe production problem"
+finishing a hotfix branch
+    $git checkout master
+    $git merge --no-ff hotfix-v1.1
+    $git tag -a v1.1
+next, include the bugfix in "develop", too
+    $git checkout develop
+    $git merge --no-ff hotfix-v1.1
+finally, remove the temporary branch
+
+NOTES:
+1. delete .git information
+    $find . -name ".git" | xargs rm -Rf
+2. view all remote branch list
+	$git branch -r
+3. delete remote branch
+	$git push origin --delete <branchname>
+4. delete remote tag
+	$git push origin --delete tag <tagname>
+
+TIPS:
+1. tag
+如果你的 tag 名是 1.0，可以按照如下方式导出:
+导出并压缩为 zip 格式 $ git archive --format=zip --output=v1.0.zip 1.0
+查看存在的tag git tag -l
+切换到某个tag git checkout tag_name
+
+2. reset --hard
+如果不要本次的修改，可以使用reset重新获取原始版本。
+$git reset --hard
+
+3. 删除远程分支
+如果本地不存在远程的分支，可以使用下面的命令删除远程分支
+$git push --delete feature-reset
+查看远程分支：$git branch -a 查看本地分支：$git branch
+
+4. 从 git 仓库中导出项目
+git archive --format tar --output /path/to/file.tar master # 将 master 以 tar 格式打包到指定文件
+
